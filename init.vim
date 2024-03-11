@@ -88,6 +88,9 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'ray-x/cmp-treesitter'
 call plug#end()
 
+
+
+
 " CONFIGS BELOW (treesitter, lsp, nvim-cmp, debugger)
 
 " Treesitter config
@@ -101,10 +104,38 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 
-" LSP config (pip install python-lsp-server)
+" LSP config (pip install "python-lsp-server[all]")
 lua << EOF
-require'lspconfig'.pylsp.setup{}
+lspconfig = require("lspconfig")
+lspconfig.pylsp.setup {
+on_attach = custom_attach,
+settings = {
+    pylsp = {
+    plugins = {
+        -- formatter options
+        -- black = { enabled = false },
+        -- autopep8 = { enabled = false },
+        -- yapf = { enabled = false },
+        -- linter options
+        -- pylint = { enabled = true, executable = "pylint" },
+        -- pyflakes = { enabled = false },
+        -- pycodestyle = { enabled = false },
+        -- type checker
+        -- pylsp_mypy = { enabled = true },
+        -- auto-completion options
+        -- jedi_completion = { fuzzy = true },
+        -- import sorting
+        -- pyls_isort = { enabled = true },
+    },
+    },
+},
+flags = {
+    debounce_text_changes = 200,
+},
+capabilities = capabilities,
+}
 EOF
+
 
 " for nvim-cmp autocomplete setup
 " long because smart tab
