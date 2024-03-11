@@ -2,6 +2,7 @@
 " F5 to return to netrw
 " ctri p to paste to terminal
 " space-y to copy file path 
+" copy to :command
 let mapleader = "\<Space>"
 tnoremap <ESC> <C-\><C-n>
 nnoremap <leader><Backspace> :e %:h<CR>
@@ -28,6 +29,9 @@ set clipboard+=unnamedplus
 set fileencoding=utf-8
 
 
+command! RunScript :split | terminal python3 %
+
+
 " Function to set tmux display variable
 function! RefreshDisplay()
 	let l:display = system("tmux show-environment | grep '^DISPLAY'")[8:]
@@ -37,7 +41,7 @@ endfunction
 
 command! RefreshDisplay call RefreshDisplay()
 
-
+nnoremap <leader>r :RunScript<CR>
 nnoremap <leader>b : Buffers <CR> 
 nnoremap <leader>ff :Files %<CR>
 nnoremap <leader>fF :Files /<CR>
@@ -48,35 +52,9 @@ nnoremap <leader>Q :bn <CR>:bd! # <CR>
 nnoremap <leader><Tab> :b! # <CR>
 nnoremap gd :lua vim.lsp.buf.definition()<CR>
 
-nnoremap <leader>' :call ToggleComment() <CR>
+" TODO: nnoremap <leader>' :call ToggleComment() <CR>
 
 
-"function! ToggleComment()
-"	let l:line = getline('.')
-"	if l:line =~ '^#'
-"		call setline('.', substitute(l:line, '^#', '', ''))
-"	else
-"		call setline('', '#' . l:line)
-"	endif
-"endfunction
-"
-"
-"function! ToggleCommentLine(line)
-"	return a:line =~ '^#' ? substitute(a:line, '^#', '', '') : '#' . a:line
-"endfunction
-"
-"
-"function! ToggleCommentVisual()
-"	let l:start = line("'<")
-"	let l:end   = line("'>")
-"	let l:shouldComment = getline(l:start) !~ '^#'
-"
-"	for l:num in range(l:start, l:end)
-"		let l:line = getline(l:num)
-"		let l:new_line = ToggleCommentLine(l:line)
-"		call setline(l:num, l:new_line)
-"	endfor
-"endfunction
 
 
 augroup NetrwSettings
@@ -89,22 +67,113 @@ augroup END
 
 
 call plug#begin('~/.local/share/nvim/plugged')
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() }}
+Plug 'junegunn/fzf.vim'
+" minimal install, end here
+
+" python debugger, config at end
 " Plug ' ~/git/nvim-dap'
 " Plug '~/git/nvim-dap-ui'
 " Plug '~/git/nvim-dap-virtual-text'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() }}
-Plug 'junegunn/fzf.vim'
+
+" LSP
 Plug 'neovim/nvim-lspconfig'
+
+" Autocompletion
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'ray-x/cmp-treesitter'
 call plug#end()
 
+" CONFIGS BELOW (treesitter, lsp, nvim-cmp, debugger)
 
+" Treesitter config
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {"python", "html", "json"},  -- or "all"
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+}
+EOF
 
+" LSP config (pip install python-lsp-server)
 lua << EOF
 require'lspconfig'.pylsp.setup{}
 EOF
 
+" for nvim-cmp autocomplete setup
+" long because smart tab
+lua << EOF
+local has_words_before = function()
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local cmp = require'cmp'
+cmp.setup({ 
+	completion = {
+        autocomplete = false,
+      },
+  mapping = {
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        if #cmp.get_entries() == 1 then
+          cmp.confirm({ select = true })
+        else
+          cmp.select_next_item()
+        end
+
+      elseif has_words_before() then
+        cmp.complete()
+        if #cmp.get_entries() == 1 then
+          cmp.confirm({ select = true })
+        end
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    ['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end,
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'buffer' },
+    { name = 'path' },
+    { name = 'cmdline' },
+    { name = 'treesitter' },
+  })
+})
+EOF
 
 
-" let g:python3_host_prog = expand('~/.config/nvim/pylsp_venv/bin/python')
-
-autocmd FileType json setlocal foldmethod=syntax
+" lua << EOF
+" local dap = require('dap')
+" require("dapui").setup()
+" dap.adapters.python = {
+"   type = 'executable';
+"   command = vim.fn.expand(vim.g.dap_python_executable);
+"   args = { '-m', 'debugpy.adapter' };
+" }
+" dap.configurations.python = {
+"   {
+"     type = 'python';
+"     request = 'launch';
+"     name = "Launch file";
+"     program = "${file}";
+"     pythonPath = vim.fn.exepath('python');
+"     console = 'integratedTerminal';
+"   },
+" }
+" EOF
