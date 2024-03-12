@@ -76,6 +76,9 @@ Plug 'junegunn/fzf.vim'
 " Plug '~/git/nvim-dap-ui'
 " Plug '~/git/nvim-dap-virtual-text'
 
+" Treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 " LSP
 Plug 'neovim/nvim-lspconfig'
 
