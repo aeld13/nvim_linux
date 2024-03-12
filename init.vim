@@ -29,7 +29,6 @@ set clipboard+=unnamedplus
 set fileencoding=utf-8
 
 
-command! RunScript :split | terminal python3 %
 
 
 " Function to set tmux display variable
@@ -40,6 +39,7 @@ function! RefreshDisplay()
 endfunction
 
 command! RefreshDisplay call RefreshDisplay()
+command! RunScript :split | terminal python3 %
 
 nnoremap <leader>r :RunScript<CR>
 nnoremap <leader>b : Buffers <CR> 
@@ -47,6 +47,8 @@ nnoremap <leader>ff :Files %<CR>
 nnoremap <leader>fF :Files /<CR>
 nnoremap <leader>fs :lcd %:p:h<CR> :Rg <CR>
 nnoremap <leader>fS :lcd <CR> :Rg <CR>
+nnoremap <leader>/ :BLines<CR>
+
 nnoremap <leader>q :bn <CR>:bd # <CR>
 nnoremap <leader>Q :bn <CR>:bd! # <CR>
 nnoremap <leader><Tab> :b! # <CR>
