@@ -1,7 +1,5 @@
 # nvim_linux
 
-User
-I'd like to create a bash script that does all of this for me:
 
 # nvim_setup
 install xclip and xsel on ubuntu machine
