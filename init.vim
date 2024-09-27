@@ -11,6 +11,9 @@ nnoremap <F5>                :e %:h<CR>
 " Copy file path to clipboard
 nnoremap <leader>y :let @+ = expand('%:p')<CR>
 
+" Paste from clipboard to terminal mode
+tnoremap <C-p> <C-\><C-N>"*Pi
+
 " Paste from clipboard in command mode
 cnoremap <C-p> <C-r>+
 
@@ -107,7 +110,8 @@ call plug#end()
 " Treesitter configuration
 lua << EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"python", "html", "json"},
+  ensure_installed = {"python", "html", "json", "rust"},
+  auto_install = true,
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -154,11 +158,13 @@ cmp.setup{
 }
 
 -- Update capabilities for LSP
+local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 lspconfig.pylsp.setup{
   capabilities = capabilities,
 }
 EOF
+
 
 " Debugger configuration
 lua << EOF
@@ -169,10 +175,10 @@ local dap_python = require('dap-python')
 dap_python.setup('python3')
 
 -- Key mappings for nvim-dap
-vim.api.nvim_set_keymap('n', '<F5>', "<Cmd>lua require'dap'.continue()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<F10>', "<Cmd>lua require'dap'.step_over()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<F11>', "<Cmd>lua require'dap'.step_into()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<F12>', "<Cmd>lua require'dap'.step_out()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<Leader>b', "<Cmd>lua require'dap'.toggle_breakpoint()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<Leader>B', "<Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>gn', "<Cmd>lua require'dap'.continue()<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>go', "<Cmd>lua require'dap'.step_over()<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>gi', "<Cmd>lua require'dap'.step_into()<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>gO', "<Cmd>lua require'dap'.step_out()<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>db', "<Cmd>lua require'dap'.toggle_breakpoint()<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>dB', "<Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", { noremap = true })
 EOF
