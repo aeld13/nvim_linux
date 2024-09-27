@@ -78,6 +78,34 @@ augroup NetrwSettings
     autocmd FileType netrw let g:netrw_liststyle = 0
 augroup END
 
+
+
+
+
+" DAP key mappings using leader
+nnoremap <leader>db :lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <leader>dB :lua require'dap'.set_breakpoint(vim.fn.input('breakpoint condition: '))<CR>
+nnoremap <leader><dRight> :lua require'dap'.continue()<CR>
+nnoremap <leader><dUp> :lua require'dap'.step_over()<CR>
+nnoremap <leader><dDown> :lua require'dap'.step_into()<CR>
+nnoremap <leader><dLeft> :lua require'dap'.step_out()<CR>
+nnoremap <leader>do :lua require'dapui'.open()<CR>
+nnoremap <leader>dO :lua require'dap'.close()<CR>
+nnoremap <leader>Do :lua require'dap'.disconnect(); require'dap'.close()<CR>
+nnoremap <leader>dn :lua require'dap'.goto_next()<CR>
+nnoremap <leader>dN :lua require'dap'.goto_prev()<CR>
+nnoremap <leader>dl :lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
+nnoremap <leader>dr :lua require'dap'.restart()<CR>
+
+
+
+
+
+
+
+
+
+
 " Plugin management with vim-plug
 call plug#begin('~/.local/share/nvim/plugged')
 
@@ -182,11 +210,7 @@ local dap_python = require('dap-python')
 -- Setup dap-python with the path to the Python interpreter
 dap_python.setup('python3')
 
--- Key mappings for nvim-dap
-vim.api.nvim_set_keymap('n', '<Leader>gn', "<Cmd>lua require'dap'.continue()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<Leader>go', "<Cmd>lua require'dap'.step_over()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<Leader>gi', "<Cmd>lua require'dap'.step_into()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<Leader>gO', "<Cmd>lua require'dap'.step_out()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<Leader>db', "<Cmd>lua require'dap'.toggle_breakpoint()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<Leader>dB', "<Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", { noremap = true })
 EOF
+
+
+
