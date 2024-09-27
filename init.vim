@@ -67,7 +67,7 @@ nnoremap gd :lua vim.lsp.buf.definition()<CR>
 
 " Toggle comment
 nnoremap <leader>' :CommentToggle<CR>
-
+vnoremap <leader>' :CommentToggle<CR>
 
 " Netrw settings
 augroup NetrwSettings
@@ -107,6 +107,13 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'mfussenegger/nvim-dap-python'
 
 call plug#end()
+
+
+" Commenting
+lua << EOF
+require('nvim_comment').setup()
+EOF
+
 
 " Treesitter configuration
 lua << EOF
