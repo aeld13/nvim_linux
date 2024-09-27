@@ -50,9 +50,10 @@ command! RunScript :split | terminal python3 %
 nnoremap <leader>r :RunScript<CR>
 
 " FZF mappings
-nnoremap <leader>ff :Files .<CR>
+nnoremap <leader>ff :Files %<CR>
 nnoremap <leader>fF :Files ~<CR>
-nnoremap <leader>fs :Rg<CR>
+nnoremap <leader>fs :lcd % <CR> :Rg<CR>
+nnoremap <leader>fs :lcd ~ <CR> :Rg<CR>
 nnoremap <leader>/ :BLines<CR>
 
 " Buffer navigation
