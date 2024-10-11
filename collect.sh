@@ -28,7 +28,7 @@ SYSTEM_PACKAGES=(
 
 # List of Python packages to collect
 PYTHON_PACKAGES=(
-    python-lsp-server
+    python-lsp-server[all]
     debugpy
 )
 

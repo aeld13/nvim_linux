@@ -143,8 +143,16 @@ install_vim_plug() {
 
 # Function to install Python dependencies via apt
 install_python_dependencies() {
-    echo "Installing python3-pylsp and python3-debugpy via apt..."
-    sudo apt-get install -y python3-pylsp python3-debugpy
+    # echo "Installing python3-pylsp and python3-debugpy via apt..."
+    # sudo apt-get install -y python3-pylsp python3-debugpy
+    echo "Installing  pylsp and debugpy via pip into /venv/global_env"
+    mkdir ~/venv
+    python3 -m venv ~/venv/global_env
+    source ~/venv/global_env/bin/activate
+    pip install --upgrade pip
+    pip install debugpy python-lsp-server[all]
+    deactivate
+    cd ~
 }
 
 # Function to install Node.js and pyright (optional)
