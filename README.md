@@ -9,4 +9,11 @@
 
 ## Installation
 
-run the install.sh, :PlugInstall after it's done, source your bash. pylsp and debugger gets installed via apt, but can be installed via pip. If so, activate venv.
+run the install.sh
+:PlugInstall after it's done, source your bash. 
+
+pylsp and debugger gets installed via pip, nvim needs to be run from the global_env with them installed.
+
+Before running nvim: export PYTHONPATH=$PYTHONPATH:~/venv/global_env/lib/python3.11/site-packages
+
+TODO: automate export step
