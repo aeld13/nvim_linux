@@ -18,4 +18,9 @@ Before running nvim: export PYTHONPATH=$PYTHONPATH:~/venv/global_env/lib/python3
 
 ### Add this to the end of your ~/.bashrc:
 
-alias nvim="source ~/venv/global_env/bin/activate && export PYTHONPATH=\$PYTHONPATH:~/venv/global_env/lib/python3.11/site-packages && nvim"
+
+`alias nvim="source ~/venv/global_env/bin/activate && export PYTHONPATH=\$PYTHONPATH:~/venv/global_env/lib/python3.11/site-packages && nvim"`
+
+Then source it:
+
+`source ~/.bashrc`
