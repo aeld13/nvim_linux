@@ -51,11 +51,18 @@ command! RunScript :split | terminal python3 %
 nnoremap <leader>r :RunScript<CR>
 
 " FZF mappings
-nnoremap <leader>ff :Files %<CR>
+nnoremap <leader>ff :Files <C-R>=b:netrw_curdir<CR><CR>
 nnoremap <leader>fF :Files ~<CR>
-nnoremap <leader>fs :lcd % <CR> :Rg<CR>
 nnoremap <leader>fs :lcd ~ <CR> :Rg<CR>
 nnoremap <leader>/ :BLines<CR>
+
+function! RipgrepInNetrwDir()
+    let l:dir = b:netrw_curdir
+    let l:cmd = 'rg --column --line-number --no-heading --color=always --smart-case ""'
+    call fzf#vim#grep(l:cmd, 1, fzf#vim#with_preview({'dir': l:dir}), 0)
+endfunction
+
+nnoremap <leader>fs :call RipgrepInNetrwDir()<CR>
 
 " Buffer navigation
 nnoremap <leader>b :Buffers<CR>

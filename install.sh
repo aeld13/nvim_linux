@@ -147,7 +147,7 @@ install_python_dependencies() {
     # sudo apt-get install -y python3-pylsp python3-debugpy
     echo "Installing  pylsp and debugpy via pip into /venv/global_env"
     mkdir ~/venv
-    python3 -m venv ~/venv/global_env
+    python3.11 -m venv ~/venv/global_env
     source ~/venv/global_env/bin/activate
     pip install --upgrade pip
     pip install debugpy python-lsp-server[all]
@@ -185,7 +185,7 @@ main() {
     detect_os
 
     case "$OS" in
-        ubuntu)
+        ubuntu|pop)
             install_packages_ubuntu
             ;;
         debian|raspbian)
