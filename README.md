@@ -16,4 +16,6 @@ pylsp and debugger gets installed via pip, nvim needs to be run from the global_
 
 Before running nvim: export PYTHONPATH=$PYTHONPATH:~/venv/global_env/lib/python3.11/site-packages
 
-TODO: automate export step
+### Add this to the end of your ~/.bashrc:
+
+alias nvim="source ~/venv/global_env/bin/activate && export PYTHONPATH=\$PYTHONPATH:~/venv/global_env/lib/python3.11/site-packages && nvim"
